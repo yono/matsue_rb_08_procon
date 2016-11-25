@@ -20,6 +20,9 @@ end
 class MazeAlready < MazeCell
 end
 
+class MazeRedAlready < MazeCell
+end
+
 class MazeCellFactory
   def self.create(str)
     case str
@@ -40,44 +43,44 @@ end
 
 class Maze < Array
   # 現在地から進める Cell がある場合に true を返す
-  def going?(spot)
+  def goal?(spot)
     i = spot[0]
     j = spot[1]
-    going = false
+    goal = false
     puts "#{i}, #{j}"
     if i > 0
       # 上探索
       puts "上探索"
       puts self[i-1][j]
-      if self[i-1][j].is_a? MazeSpace
-        going = true
+      if self[i-1][j].is_a? MazeGoal
+        goal = true
       end
     end
     if i < self.length - 1
       # 下探索
       puts "下探索"
       puts self[i+1][j]
-      if self[i+1][j].is_a? MazeSpace
-        going = true
+      if self[i+1][j].is_a? MazeGoal
+        goal = true
       end
     end
     if j > 0
       # 左探索
       puts "左探索"
       puts self[i][j-1]
-      if self[i][j-1].is_a? MazeSpace
-        going = true
+      if self[i][j-1].is_a? MazeGoal
+        goal = true
       end
     end
     if j < self[i].length
       # 右探索
       puts "右探索"
       puts self[i][j+1]
-      if self[i][j+1].is_a? MazeSpace
-        going = true
+      if self[i][j+1].is_a? MazeGoal
+        goal = true
       end
     end
-    going
+    goal
   end
 
   # 指定された位置へ移動する
@@ -90,6 +93,7 @@ class Maze < Array
       puts "上探索"
       puts self[i-1][j]
       if self[i-1][j].is_a? MazeSpace
+        already_spot(spot)
         return [i-1, j]
       end
     end
@@ -98,6 +102,7 @@ class Maze < Array
       puts "下探索"
       puts self[i+1][j]
       if self[i+1][j].is_a? MazeSpace
+        already_spot(spot)
         return [i+1, j]
       end
     end
@@ -106,6 +111,7 @@ class Maze < Array
       puts "左探索"
       puts self[i][j-1]
       if self[i][j-1].is_a? MazeSpace
+        already_spot(spot)
         return [i, j-1]
       end
     end
@@ -114,14 +120,63 @@ class Maze < Array
       puts "右探索"
       puts self[i][j+1]
       if self[i][j+1].is_a? MazeSpace
+        already_spot(spot)
         return [i, j+1]
       end
     end
+    return_spot(spot)
   end
 
   # 指定された位置の Cell を書き換える
   def already_spot(spot)
     self[spot[0]][spot[1]] = MazeAlready.new(";")
+  end
+
+  def red_already_spot(spot)
+    self[spot[0]][spot[1]] = MazeRedAlready.new("*")
+  end
+
+  # 来た道を戻って来た印を付ける
+  def return_spot(spot)
+    i = spot[0]
+    j = spot[1]
+    puts "#{i}, #{j}"
+    if i > 0
+      # 上探索
+      puts "上探索"
+      puts self[i-1][j]
+      if self[i-1][j].is_a? MazeAlready
+        red_already_spot(spot)
+        return [i-1, j]
+      end
+    end
+    if i < self.length - 1
+      # 下探索
+      puts "下探索"
+      puts self[i+1][j]
+      if self[i+1][j].is_a? MazeAlready
+        red_already_spot(spot)
+        return [i+1, j]
+      end
+    end
+    if j > 0
+      # 左探索
+      puts "左探索"
+      puts self[i][j-1]
+      if self[i][j-1].is_a? MazeAlready
+        red_already_spot(spot)
+        return [i, j-1]
+      end
+    end
+    if j < self[i].length
+      # 右探索
+      puts "右探索"
+      puts self[i][j+1]
+      if self[i][j+1].is_a? MazeAlready
+        red_already_spot(spot)
+        return [i, j+1]
+      end
+    end
   end
 end
 
@@ -141,9 +196,8 @@ end
 
 # random_walk
 current_spot = start_spot.dup
-while(maze_twod_ary.going?(current_spot))
+while(!maze_twod_ary.goal?(current_spot))
   current_spot = maze_twod_ary.next_spot(current_spot)
-  maze_twod_ary.already_spot(current_spot)
 end
 
 maze_twod_ary.each do |maze_row|
