@@ -93,8 +93,8 @@ class Maze < Array
       puts "上探索"
       puts self[i-1][j]
       if self[i-1][j].is_a? MazeSpace
-        already_spot(spot)
-        return [i-1, j]
+        already_spot([i-1,j])
+        return [i-1,j]
       end
     end
     if i < self.length - 1
@@ -102,7 +102,7 @@ class Maze < Array
       puts "下探索"
       puts self[i+1][j]
       if self[i+1][j].is_a? MazeSpace
-        already_spot(spot)
+        already_spot([i+1,j])
         return [i+1, j]
       end
     end
@@ -111,8 +111,8 @@ class Maze < Array
       puts "左探索"
       puts self[i][j-1]
       if self[i][j-1].is_a? MazeSpace
-        already_spot(spot)
-        return [i, j-1]
+        already_spot([i,j-1])
+        return [i,j-1]
       end
     end
     if j < self[i].length
@@ -120,8 +120,8 @@ class Maze < Array
       puts "右探索"
       puts self[i][j+1]
       if self[i][j+1].is_a? MazeSpace
-        already_spot(spot)
-        return [i, j+1]
+        already_spot([i,j+1])
+        return [i,j+1]
       end
     end
     return_spot(spot)
@@ -129,7 +129,7 @@ class Maze < Array
 
   # 指定された位置の Cell を書き換える
   def already_spot(spot)
-    self[spot[0]][spot[1]] = MazeAlready.new(";")
+    self[spot[0]][spot[1]] = MazeAlready.new(":")
   end
 
   def red_already_spot(spot)
@@ -202,7 +202,11 @@ end
 
 maze_twod_ary.each do |maze_row|
   maze_row.each do |maze_cell|
-    print maze_cell
+    if maze_cell.is_a? MazeRedAlready
+      print ' '
+    else
+      print maze_cell
+    end
   end
   print "\n"
 end
