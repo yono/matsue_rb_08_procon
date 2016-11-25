@@ -47,35 +47,26 @@ class Maze < Array
     i = spot[0]
     j = spot[1]
     goal = false
-    puts "#{i}, #{j}"
     if i > 0
       # 上探索
-      puts "上探索"
-      puts self[i-1][j]
       if self[i-1][j].is_a? MazeGoal
         goal = true
       end
     end
     if i < self.length - 1
       # 下探索
-      puts "下探索"
-      puts self[i+1][j]
       if self[i+1][j].is_a? MazeGoal
         goal = true
       end
     end
     if j > 0
       # 左探索
-      puts "左探索"
-      puts self[i][j-1]
       if self[i][j-1].is_a? MazeGoal
         goal = true
       end
     end
     if j < self[i].length
       # 右探索
-      puts "右探索"
-      puts self[i][j+1]
       if self[i][j+1].is_a? MazeGoal
         goal = true
       end
@@ -87,11 +78,8 @@ class Maze < Array
   def next_spot(spot)
     i = spot[0]
     j = spot[1]
-    puts "#{i}, #{j}"
     if i > 0
       # 上探索
-      puts "上探索"
-      puts self[i-1][j]
       if self[i-1][j].is_a? MazeSpace
         already_spot([i-1,j])
         return [i-1,j]
@@ -99,8 +87,6 @@ class Maze < Array
     end
     if i < self.length - 1
       # 下探索
-      puts "下探索"
-      puts self[i+1][j]
       if self[i+1][j].is_a? MazeSpace
         already_spot([i+1,j])
         return [i+1, j]
@@ -108,8 +94,6 @@ class Maze < Array
     end
     if j > 0
       # 左探索
-      puts "左探索"
-      puts self[i][j-1]
       if self[i][j-1].is_a? MazeSpace
         already_spot([i,j-1])
         return [i,j-1]
@@ -117,8 +101,6 @@ class Maze < Array
     end
     if j < self[i].length
       # 右探索
-      puts "右探索"
-      puts self[i][j+1]
       if self[i][j+1].is_a? MazeSpace
         already_spot([i,j+1])
         return [i,j+1]
@@ -140,11 +122,8 @@ class Maze < Array
   def return_spot(spot)
     i = spot[0]
     j = spot[1]
-    puts "#{i}, #{j}"
     if i > 0
       # 上探索
-      puts "上探索"
-      puts self[i-1][j]
       if self[i-1][j].is_a? MazeAlready
         red_already_spot(spot)
         return [i-1, j]
@@ -152,8 +131,6 @@ class Maze < Array
     end
     if i < self.length - 1
       # 下探索
-      puts "下探索"
-      puts self[i+1][j]
       if self[i+1][j].is_a? MazeAlready
         red_already_spot(spot)
         return [i+1, j]
@@ -161,8 +138,6 @@ class Maze < Array
     end
     if j > 0
       # 左探索
-      puts "左探索"
-      puts self[i][j-1]
       if self[i][j-1].is_a? MazeAlready
         red_already_spot(spot)
         return [i, j-1]
@@ -170,8 +145,6 @@ class Maze < Array
     end
     if j < self[i].length
       # 右探索
-      puts "右探索"
-      puts self[i][j+1]
       if self[i][j+1].is_a? MazeAlready
         red_already_spot(spot)
         return [i, j+1]
@@ -200,15 +173,8 @@ while(!maze_twod_ary.goal?(current_spot))
   current_spot = maze_twod_ary.next_spot(current_spot)
 end
 
-maze_twod_ary.each do |maze_row|
-  maze_row.each do |maze_cell|
-    if maze_cell.is_a? MazeRedAlready
-      print ' '
-    else
-      print maze_cell
-    end
-  end
-  print "\n"
+maze_twod_ary.each_with_index do |maze_row, i|
+  maze_ary[i] = maze_row.join.tr('*', ' ')
 end
 
 puts(maze_ary)
