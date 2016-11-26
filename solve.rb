@@ -7,8 +7,8 @@ class MazeStart < MazeCell; end
 class MazeGoal < MazeCell; end
 class MazeWall < MazeCell; end
 class MazeSpace < MazeCell; end
+class MazeRoute < MazeCell; end
 class MazeAlready < MazeCell; end
-class MazeRedAlready < MazeCell; end
 
 class MazeCellFactory
   def self.create(str)
@@ -32,32 +32,30 @@ class Maze < Array
   def goal?(spot)
     i = spot[0]
     j = spot[1]
-    goal = false
     if i > 0
       # 上探索
       if self[i-1][j].is_a? MazeGoal
-        goal = true
+        return true
       end
     end
     if i < self.length - 1
       # 下探索
       if self[i+1][j].is_a? MazeGoal
-        goal = true
+        return true
       end
     end
     if j > 0
       # 左探索
       if self[i][j-1].is_a? MazeGoal
-        goal = true
+        return true
       end
     end
     if j < self[i].length
       # 右探索
       if self[i][j+1].is_a? MazeGoal
-        goal = true
+        return true
       end
     end
-    goal
   end
 
   # 指定された位置へ移動する
@@ -67,28 +65,28 @@ class Maze < Array
     if i > 0
       # 上探索
       if self[i-1][j].is_a? MazeSpace
-        already_spot([i-1,j])
+        check_to_spot([i-1,j])
         return [i-1,j]
       end
     end
     if i < self.length - 1
       # 下探索
       if self[i+1][j].is_a? MazeSpace
-        already_spot([i+1,j])
+        check_to_spot([i+1,j])
         return [i+1, j]
       end
     end
     if j > 0
       # 左探索
       if self[i][j-1].is_a? MazeSpace
-        already_spot([i,j-1])
+        check_to_spot([i,j-1])
         return [i,j-1]
       end
     end
     if j < self[i].length
       # 右探索
       if self[i][j+1].is_a? MazeSpace
-        already_spot([i,j+1])
+        check_to_spot([i,j+1])
         return [i,j+1]
       end
     end
@@ -96,12 +94,12 @@ class Maze < Array
   end
 
   # 指定された位置の Cell を書き換える
-  def already_spot(spot)
-    self[spot[0]][spot[1]] = MazeAlready.new(":")
+  def check_to_spot(spot)
+    self[spot[0]][spot[1]] = MazeRoute.new(":")
   end
 
   def red_already_spot(spot)
-    self[spot[0]][spot[1]] = MazeRedAlready.new("*")
+    self[spot[0]][spot[1]] = MazeAlready.new("*")
   end
 
   # 来た道を戻って来た印を付ける
@@ -110,28 +108,28 @@ class Maze < Array
     j = spot[1]
     if i > 0
       # 上探索
-      if self[i-1][j].is_a? MazeAlready
+      if self[i-1][j].is_a? MazeRoute
         red_already_spot(spot)
         return [i-1, j]
       end
     end
     if i < self.length - 1
       # 下探索
-      if self[i+1][j].is_a? MazeAlready
+      if self[i+1][j].is_a? MazeRoute
         red_already_spot(spot)
         return [i+1, j]
       end
     end
     if j > 0
       # 左探索
-      if self[i][j-1].is_a? MazeAlready
+      if self[i][j-1].is_a? MazeRoute
         red_already_spot(spot)
         return [i, j-1]
       end
     end
     if j < self[i].length
       # 右探索
-      if self[i][j+1].is_a? MazeAlready
+      if self[i][j+1].is_a? MazeRoute
         red_already_spot(spot)
         return [i, j+1]
       end
