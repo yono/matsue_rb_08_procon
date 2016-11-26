@@ -34,25 +34,25 @@ class Maze < Array
     j = spot[1]
     if i > 0
       # 上探索
-      if self[i-1][j].is_a? MazeGoal
+      if self[i-1][j] == 'G'
         return true
       end
     end
     if i < self.length - 1
       # 下探索
-      if self[i+1][j].is_a? MazeGoal
+      if self[i+1][j] == 'G'
         return true
       end
     end
     if j > 0
       # 左探索
-      if self[i][j-1].is_a? MazeGoal
+      if self[i][j-1] == 'G'
         return true
       end
     end
     if j < self[i].length
       # 右探索
-      if self[i][j+1].is_a? MazeGoal
+      if self[i][j+1] == 'G'
         return true
       end
     end
@@ -64,42 +64,33 @@ class Maze < Array
     j = spot[1]
     if i > 0
       # 上探索
-      if self[i-1][j].is_a? MazeSpace
-        check_to_spot([i-1,j])
+      if self[i-1][j] == ' '
+        self[i-1][j] = MazeRoute.new(":")
         return [i-1,j]
       end
     end
     if i < self.length - 1
       # 下探索
-      if self[i+1][j].is_a? MazeSpace
-        check_to_spot([i+1,j])
+      if self[i+1][j] == ' '
+        self[i+1][j] = MazeRoute.new(":")
         return [i+1, j]
       end
     end
     if j > 0
       # 左探索
-      if self[i][j-1].is_a? MazeSpace
-        check_to_spot([i,j-1])
+      if self[i][j-1] == ' '
+        self[i][j-1] = MazeRoute.new(":")
         return [i,j-1]
       end
     end
     if j < self[i].length
       # 右探索
-      if self[i][j+1].is_a? MazeSpace
-        check_to_spot([i,j+1])
+      if self[i][j+1] == ' '
+        self[i][j+1] = MazeRoute.new(":")
         return [i,j+1]
       end
     end
     return_spot(spot)
-  end
-
-  # 指定された位置の Cell を書き換える
-  def check_to_spot(spot)
-    self[spot[0]][spot[1]] = MazeRoute.new(":")
-  end
-
-  def red_already_spot(spot)
-    self[spot[0]][spot[1]] = MazeAlready.new("*")
   end
 
   # 来た道を戻って来た印を付ける
@@ -108,29 +99,29 @@ class Maze < Array
     j = spot[1]
     if i > 0
       # 上探索
-      if self[i-1][j].is_a? MazeRoute
-        red_already_spot(spot)
+      if self[i-1][j] == ':'
+        self[i][j] = MazeAlready.new("*")
         return [i-1, j]
       end
     end
     if i < self.length - 1
       # 下探索
-      if self[i+1][j].is_a? MazeRoute
-        red_already_spot(spot)
+      if self[i+1][j] == ':'
+        self[i][j] = MazeAlready.new("*")
         return [i+1, j]
       end
     end
     if j > 0
       # 左探索
-      if self[i][j-1].is_a? MazeRoute
-        red_already_spot(spot)
+      if self[i][j-1] == ':'
+        self[i][j] = MazeAlready.new("*")
         return [i, j-1]
       end
     end
     if j < self[i].length
       # 右探索
-      if self[i][j+1].is_a? MazeRoute
-        red_already_spot(spot)
+      if self[i][j+1] == ':'
+        self[i][j] = MazeAlready.new("*")
         return [i, j+1]
       end
     end
