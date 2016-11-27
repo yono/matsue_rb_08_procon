@@ -37,37 +37,41 @@ class Maze < Array
     return_to_right = false
     if i > 0
       # 上探索
-      if self[i-1][j] == ' '
+      top = self[i-1][j]
+      if top == ' '
         self[i-1][j] = ':'
         return [i-1,j]
-      elsif self[i-1][j] == ':'
+      elsif top == ':'
         return_to_top = true
       end
     end
     if i < self.length - 1
       # 下探索
-      if self[i+1][j] == ' '
+      bottom = self[i+1][j]
+      if bottom == ' '
         self[i+1][j] = ':'
         return [i+1, j]
-      elsif self[i+1][j] == ':'
+      elsif bottom == ':'
         return_to_bottom = true
       end
     end
     if j > 0
       # 左探索
-      if self[i][j-1] == ' '
+      left = self[i][j-1]
+      if left == ' '
         self[i][j-1] = ':'
         return [i,j-1]
-      elsif self[i][j-1] == ':'
+      elsif left == ':'
         return_to_left = true
       end
     end
     if j < self[i].length
       # 右探索
-      if self[i][j+1] == ' '
+      right = self[i][j+1]
+      if right == ' '
         self[i][j+1] = ':'
         return [i,j+1]
-      elsif self[i][j+1] == ':'
+      elsif right == ':'
         return_to_right = true
       end
     end
