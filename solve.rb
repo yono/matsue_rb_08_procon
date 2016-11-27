@@ -108,8 +108,8 @@ while(!Maze.goal?(current_i, current_j, maze_ary))
   current_i, current_j = Maze.next_spot(current_i, current_j, maze_ary)
 end
 
-#maze_twod_ary.each_with_index do |maze_row, i|
-#  maze_ary[i] = maze_row.join.tr('*', ' ')
-#end
+maze_ary.each_with_index do |maze_row, i|
+  maze_ary[i] = maze_row.tr('*', ' ')
+end
 
 puts(maze_ary)
