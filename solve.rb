@@ -89,18 +89,15 @@ class Maze
 end
 
 start_i, start_j = 0, 0
-#maze_twod_ary = Maze.new
 
 maze_ary.each_with_index do |row, row_i|
-  #_array = []
   row.enum_for(:each_char).each_with_index do |column, column_j|
-    #_array << column
     if column == 'S'
       start_i = row_i
       start_j = column_j
+      break
     end
   end
-  #maze_twod_ary << _array
 end
 
 current_i, current_j = start_i, start_j
