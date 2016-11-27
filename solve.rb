@@ -3,10 +3,7 @@ maze_ary = STDIN.each_line.map(&:chomp)
 # ここに処理を書いてください。
 
 class Maze < Array
-  # 現在地から進める Cell がある場合に true を返す
-  def goal?(spot)
-    i = spot[0]
-    j = spot[1]
+  def goal?(i, j)
     if i > 0
       # 上探索
       if self[i-1][j] == 'G'
@@ -33,10 +30,7 @@ class Maze < Array
     end
   end
 
-  # 指定された位置へ移動する
-  def next_spot(spot)
-    i = spot[0]
-    j = spot[1]
+  def next_spot(i, j)
     return_to_top = false
     return_to_bottom = false
     return_to_left = false
@@ -90,7 +84,7 @@ class Maze < Array
   end
 end
 
-start_spot = [0, 0]
+start_i, start_j = 0, 0
 maze_twod_ary = Maze.new
 
 maze_ary.each_with_index do |row, row_i|
@@ -98,15 +92,16 @@ maze_ary.each_with_index do |row, row_i|
   row.enum_for(:each_char).each_with_index do |column, column_j|
     _array << column
     if column == 'S'
-      start_spot = [row_i, column_j]
+      start_i = row_i
+      start_j = column_j
     end
   end
   maze_twod_ary << _array
 end
 
-current_spot = start_spot.dup
-while(!maze_twod_ary.goal?(current_spot))
-  current_spot = maze_twod_ary.next_spot(current_spot)
+current_i, current_j = start_i, start_j
+while(!maze_twod_ary.goal?(current_i, current_j))
+  current_i, current_j = maze_twod_ary.next_spot(current_i, current_j)
 end
 
 maze_twod_ary.each_with_index do |maze_row, i|
