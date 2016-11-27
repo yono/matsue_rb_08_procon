@@ -40,7 +40,7 @@ class Maze < Array
       top = self[i-1][j]
       if top == ' '
         self[i-1][j] = ':'
-        return [i-1,j]
+        return i-1,j
       elsif top == ':'
         return_to_top = true
       end
@@ -50,7 +50,7 @@ class Maze < Array
       bottom = self[i+1][j]
       if bottom == ' '
         self[i+1][j] = ':'
-        return [i+1, j]
+        return i+1, j
       elsif bottom == ':'
         return_to_bottom = true
       end
@@ -60,7 +60,7 @@ class Maze < Array
       left = self[i][j-1]
       if left == ' '
         self[i][j-1] = ':'
-        return [i,j-1]
+        return i,j-1
       elsif left == ':'
         return_to_left = true
       end
@@ -70,20 +70,20 @@ class Maze < Array
       right = self[i][j+1]
       if right == ' '
         self[i][j+1] = ':'
-        return [i,j+1]
+        return i,j+1
       elsif right == ':'
         return_to_right = true
       end
     end
     self[i][j] = '*'
     if return_to_top
-      return [i-1, j]
+      return i-1, j
     elsif return_to_bottom
-      return [i+1, j]
+      return i+1, j
     elsif return_to_left
-      return [i, j-1]
+      return i, j-1
     else
-      return [i, j+1]
+      return i, j+1
     end
   end
 end
