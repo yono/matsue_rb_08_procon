@@ -91,12 +91,10 @@ end
 start_i, start_j = 0, 0
 
 maze_ary.each_with_index do |row, row_i|
-  row.enum_for(:each_char).each_with_index do |column, column_j|
-    if column == 'S'
-      start_i = row_i
-      start_j = column_j
-      break
-    end
+  start_j = row.index('S')
+  if start_j
+    start_i = row_i
+    break
   end
 end
 
